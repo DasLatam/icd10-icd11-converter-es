@@ -19,8 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-This license covers the source code only. The classification data that
-scripts/etl.py downloads (ICD-11 and WHO mapping tables, ICD-10 in Spanish)
-is NOT covered by this license: see "Licences and attribution" in README.en.md
-("Fuentes, licencias y atribución" in README.md).
