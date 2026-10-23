@@ -12,6 +12,7 @@ Deja en DESTINO un sitio que se sube tal cual a cualquier carpeta del hosting:
     api/v1/cie.db                                   la base (storage/cie.db; sólo lectura)
     api/v1/{textos,meta,openapi}.json               lo que la API PHP no recalcula
     .htaccess, router.php                           Apache / `php -S` para probar
+    sitemap.xml                                     si la marca tiene url_publica e indexar
 
 meta.json y openapi.json salen de la app Python (mismo texto en las dos
 versiones); textos.json, de app/datos.py. Necesita storage/cie.db (scripts/etl.py).
@@ -108,6 +109,15 @@ def construir(destino: Path, ruta_marca: str | None, url_publica: str | None) ->
     spec = json.loads(spec)
     spec["servers"] = [{"url": base if m["url_publica"] else ".", "description": "Este servidor"}]
     (v1 / "openapi.json").write_text(json.dumps(spec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+    # sitemap.xml, sólo si va a ser indexable y tiene URL pública
+    if m["url_publica"] and m["indexar"]:
+        from datetime import date
+        urls = "".join(f"<url><loc>{m['url_publica']}/{r}</loc><lastmod>{date.today().isoformat()}</lastmod></url>"
+                       for r in ("", "api/", "api/docs/"))
+        (destino / "sitemap.xml").write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n', encoding="utf-8")
 
     pesos = sum(f.stat().st_size for f in destino.rglob("*") if f.is_file())
     print(f"listo: {destino} ({len(list(destino.rglob('*')))} archivos, {pesos / 1e6:.1f} MB)")
