@@ -1,0 +1,12 @@
+# Datos: los baja scripts/etl.py de las fuentes oficiales (no se redistribuyen acá)
+storage/
+# Salidas
+dist/
+logs/
+__pycache__/
+*.pyc
+# Notas y scripts de un despliegue en particular
+CLAUDE.md
+BITACORA.md
+deploy-*.sh
+.claude/

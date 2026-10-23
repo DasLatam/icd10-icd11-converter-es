@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+{{robots}}
+{{canonical}}
+<title>API · {{nombre}}</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../estilos.css">
+<link rel="stylesheet" href="../marca.css">
+</head>
+<body>
+<header class="cabecera">
+  <div class="envoltura">
+    <a class="marca" href="../"><span class="logo" aria-hidden="true">{{logo}}</span>
+      <span><strong>{{nombre}}</strong><small>API para sistemas de salud</small></span></a>
+    <nav aria-label="Secciones"><a href="../">Conversor</a></nav>
+  </div>
+</header>
+<main class="envoltura doc">
+  <h1>API de equivalencias CIE-10 ↔ CIE-11</h1>
+  <p>Una API REST con respuestas JSON para que historias clínicas, sistemas de facturación, de estadística o de vigilancia consulten la CIE-10 y la CIE-11 en español y las tablas oficiales de correspondencia de la OMS entre las dos. Está versionada en <code>/api/v1</code>, documentada con OpenAPI 3 y sólo maneja datos de clasificación.</p>
+  <div class="tarjetas">
+    <div><h2>Documentación</h2><p>Todas las rutas, parámetros y respuestas, con un botón para probar cada una.</p><p><a class="boton primario" href="docs/">Abrir la documentación</a></p></div>
+    <div><h2>OpenAPI 3</h2><p>La especificación para generar clientes o importar en Postman o Insomnia.</p><p><a class="boton" href="v1/openapi.json">openapi.json</a></p></div>
+    <div><h2>Versiones y licencias</h2><p>Fuentes, versiones, conteos, atribución y licencias de los datos.</p><p><a class="boton" href="v1/meta">/api/v1/meta</a></p></div>
+  </div>
+
+  <h2>Lo principal</h2>
+  <table>
+    <thead><tr><th>Para</th><th>Ruta</th></tr></thead>
+    <tbody>
+      <tr><td>Análogos CIE-11 de un código CIE-10</td><td><code>GET /api/v1/convertir/cie10-a-cie11/{codigo}</code></td></tr>
+      <tr><td>Análogos CIE-10 de un código CIE-11</td><td><code>GET /api/v1/convertir/cie11-a-cie10/{codigo}</code></td></tr>
+      <tr><td>Conversión por lote (hasta 100)</td><td><code>POST /api/v1/convertir/lote</code></td></tr>
+      <tr><td>Buscar por código o texto</td><td><code>GET /api/v1/cie10/buscar?q=</code> · <code>/api/v1/cie11/buscar?q=</code></td></tr>
+      <tr><td>Ficha, hijos y ancestros</td><td><code>GET /api/v1/cie10/{codigo}</code> · <code>/hijos</code> · <code>/ancestros</code> (ídem cie11)</td></tr>
+      <tr><td>Capítulos</td><td><code>GET /api/v1/cie10/capitulos</code> · <code>/api/v1/cie11/capitulos</code></td></tr>
+      <tr><td>Estado</td><td><code>GET /api/v1/salud</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Reglas de uso</h2>
+  <p><b>No envíe datos de pacientes.</b> La API sólo recibe códigos o texto de búsqueda; el lote rechaza cualquier campo que no sea <code>sentido</code>, <code>codigos</code> o <code>sin_sugerencias</code>. No se guarda el contenido de las consultas: sólo contadores agregados por ruta y día.</p>
+  <p>Hay un límite de pedidos por IP (cabeceras <code>X-RateLimit-Limit</code> y <code>X-RateLimit-Remaining</code>; al pasarse, 429 con <code>Retry-After</code>). Las respuestas traen <code>ETag</code> y <code>Cache-Control</code>: los datos sólo cambian cuando cambia la versión (<code>X-Datos-Version</code>). Los errores son JSON con <code>error.codigo</code> y <code>error.mensaje</code>.</p>
+  <p>Las equivalencias son las de las tablas oficiales de la OMS; no reemplazan la validación clínica ni de codificación. Cuando no hay correspondencia oficial, la respuesta puede traer <code>sugerencias_automaticas</code>: son coincidencias de texto calculadas por este servicio, separadas y rotuladas como no oficiales.</p>
+</main>
+<footer class="pie"><div class="envoltura"><p>CIE-11 © OMS 2019, CC BY-ND 3.0 IGO. CIE-10 © OMS/OPS. Detalle de atribución en <a href="v1/meta">/api/v1/meta</a> y al pie del <a href="../">conversor</a>.</p>{{pie_extra}}</div></footer>
+</body>
+</html>

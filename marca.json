@@ -1,0 +1,17 @@
+{
+  "_leeme": "Marca del micrositio. Cambiá estos valores (o apuntá CIE_MARCA a otro archivo) y reiniciá / reconstruí. Las claves que falten toman el valor por defecto de app/marca.py.",
+  "nombre": "Conversor CIE-10 ↔ CIE-11",
+  "lema": "en español · tablas oficiales de la OMS",
+  "logo": "CIE",
+  "descripcion": "Conversor visual entre CIE-10 y CIE-11 en español, con las tablas oficiales de correspondencia de la OMS, y una API REST para sistemas de salud.",
+  "url_publica": "",
+  "indexar": false,
+  "pie_html": "",
+  "colores": {
+    "acento": "#0b6e8a",
+    "acento_claro": "#e3f2f7",
+    "fondo": "#f5f8fa",
+    "tinta": "#14232e",
+    "foco": "#f0a202"
+  }
+}

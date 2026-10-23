@@ -1,0 +1,31 @@
+# api/v1/.htaccess — la API PHP en Apache. Lo copia scripts/construir_estatico.py.
+#
+# Va en api/v1/ y no en api/ a propósito: un .htaccess con RewriteEngine On
+# anula las reglas de la carpeta de arriba, y Apache no lo aplica cuando la
+# carpeta se pide sin barra final (/api), que entonces da 403. Con api/ sin
+# .htaccess, /api → /api/ y /api/docs → /api/docs/ los resuelve el de arriba.
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+# La base y los archivos de trabajo no se sirven.
+<FilesMatch "\.(db|sqlite|subiendo)$|^textos\.json$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # REGLAS-DEL-HOSTING (las agrega el despliegue, si hacen falta)
+
+  # Todo /api/v1/* lo atiende index.php (que lee la ruta de REQUEST_URI).
+  RewriteRule ^index\.php$ - [L]
+  RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE application/json
+</IfModule>

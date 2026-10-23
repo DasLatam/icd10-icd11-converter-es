@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+{{robots}}
+{{canonical}}
+<meta name="description" content="{{descripcion}}">
+<title>{{nombre}}</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="estilos.css">
+<link rel="stylesheet" href="marca.css">
+</head>
+<body>
+<a class="saltar" href="#buscador">Ir al buscador</a>
+<header class="cabecera">
+  <div class="envoltura">
+    <a class="marca" href="./" aria-label="{{nombre}}, inicio">
+      <span class="logo" aria-hidden="true">{{logo}}</span>
+      <span><strong>{{nombre}}</strong><small>{{lema}}</small></span>
+    </a>
+    <nav aria-label="Secciones"><a href="api/">API</a></nav>
+  </div>
+</header>
+
+<main id="principal" class="envoltura">
+  <section class="busqueda" aria-labelledby="titulo-busqueda">
+    <h1 id="titulo-busqueda" class="oculto">Buscar un código y ver sus equivalencias</h1>
+    <div class="sentido" role="radiogroup" aria-label="Sentido de la conversión">
+      <button type="button" role="radio" id="s10" data-de="cie10" aria-checked="true">CIE-10 <span aria-hidden="true">→</span><span class="oculto"> a </span> CIE-11</button>
+      <button type="button" class="invertir" id="invertir" aria-label="Invertir el sentido" title="Invertir el sentido">⇄</button>
+      <button type="button" role="radio" id="s11" data-de="cie11" aria-checked="false">CIE-11 <span aria-hidden="true">→</span><span class="oculto"> a </span> CIE-10</button>
+    </div>
+
+    <div class="caja" id="caja">
+      <label for="buscador" class="oculto" id="rotulo-buscador">Código o palabra de la CIE-10</label>
+      <svg class="lupa" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="buscador" type="search" autocomplete="off" autocapitalize="off" spellcheck="false"
+             role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugerencias"
+             aria-describedby="ayuda" placeholder="Escribí un código (E11.9) o una palabra (diabetes)" maxlength="100">
+      <button type="button" id="limpiar" class="limpiar" aria-label="Borrar la búsqueda" hidden>×</button>
+      <ul id="sugerencias" role="listbox" aria-label="Sugerencias" hidden></ul>
+    </div>
+    <p id="ayuda" class="ayuda">Probá con <button type="button" class="ejemplo" data-q="E11.9">E11.9</button>
+      <button type="button" class="ejemplo" data-q="I10">I10</button>
+      <button type="button" class="ejemplo" data-q="U07.1">U07.1</button>
+      <button type="button" class="ejemplo" data-q="asma">asma</button>
+      <button type="button" class="ejemplo" data-q="depresion">depresión</button></p>
+    <p id="estado" class="oculto" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="resultado" class="resultado" aria-live="polite" hidden></section>
+
+  <section id="bienvenida" class="bienvenida">
+    <div class="pasos">
+      <div><span aria-hidden="true">1</span><p>Elegí el sentido: de <b>CIE-10</b> a <b>CIE-11</b> o al revés.</p></div>
+      <div><span aria-hidden="true">2</span><p>Escribí un código o una palabra y elegí una sugerencia.</p></div>
+      <div><span aria-hidden="true">3</span><p>Mirá los análogos, de la equivalencia más exacta a la más lejana. Tocá una tarjeta para ver su ficha o invertir la búsqueda.</p></div>
+    </div>
+    <div class="leyenda" aria-label="Qué significa cada tipo de correspondencia">
+      <h2>Tipos de correspondencia</h2>
+      <ul>
+        <li><span class="rotulo t-equivalente"><i aria-hidden="true">●</i>Equivalente</span> la OMS la da en los dos sentidos.</li>
+        <li><span class="rotulo t-aproximado"><i aria-hidden="true">≈</i>Aproximado</span> destino principal, pero no exacto.</li>
+        <li><span class="rotulo t-uno_a_varios"><i aria-hidden="true">⇉</i>Uno a varios</span> el código se reparte en varios.</li>
+        <li><span class="rotulo t-combinacion"><i aria-hidden="true">⊕</i>Combinación</span> código base + códigos de extensión.</li>
+        <li><span class="rotulo t-agrupacion"><i aria-hidden="true">▢</i>Agrupación</span> el destino es un grupo, no un código.</li>
+        <li><span class="rotulo t-relacionado"><i aria-hidden="true">↔</i>Relacionado</span> según la tabla del otro sentido.</li>
+        <li><span class="rotulo t-sin_equivalente"><i aria-hidden="true">∅</i>Sin equivalente</span> la tabla no trae destino.</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="aviso" role="note"><strong>Importante:</strong> equivalencias según las tablas oficiales de la OMS; no reemplazan la validación clínica ni de codificación.</p>
+</main>
+
+<dialog id="ficha" aria-labelledby="ficha-titulo">
+  <div class="ficha-cab">
+    <h2 id="ficha-titulo">Ficha</h2>
+    <button type="button" class="cerrar" id="ficha-cerrar" aria-label="Cerrar la ficha">×</button>
+  </div>
+  <div id="ficha-cuerpo"></div>
+</dialog>
+
+<div id="tostada" class="tostada" role="status" aria-live="polite" hidden></div>
+
+<footer class="pie">
+  <div class="envoltura">
+    <p><b>CIE-11:</b> Clasificación Internacional de Enfermedades, Undécima Revisión (CIE-11), Organización Mundial de la Salud (OMS) 2019, <a href="https://icd.who.int/browse11" rel="noopener">icd.who.int/browse11</a>, versión MMS 2026-01 en español. Bajo licencia <a href="https://creativecommons.org/licenses/by-nd/3.0/igo/deed.es" rel="noopener">CC BY-ND 3.0 IGO</a>. Tablas de correspondencia CIE-10 ↔ CIE-11 de la OMS (2026-01).</p>
+    <p><b>CIE-10:</b> Clasificación Estadística Internacional de Enfermedades y Problemas Relacionados con la Salud, Décima Revisión. © OMS; edición en español de la OPS/OMS. Catálogo CIE-10 de la Secretaría de Salud de México (DGIS, datos abiertos) y títulos de grupo del Volumen 1 (OPS, 2018).</p>
+    <p>Los códigos y títulos se muestran tal como los publican las fuentes, sin traducir ni modificar. Este sitio no es de la OMS ni está avalado por ella. No recibe ni guarda datos de pacientes. <a href="api/">API y documentación</a> · <span id="version"></span></p>
+    {{pie_extra}}
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
